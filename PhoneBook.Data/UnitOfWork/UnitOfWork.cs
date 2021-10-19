@@ -14,6 +14,7 @@ namespace PhoneBook.Data.UnitOfWork
         private readonly PhoneBookContext _context;
         private PersonRepository _personRepository;
         private ContactRepository _contactRepository;
+        private ContactTypeRepository _contactTypeRepository;
 
         public UnitOfWork(PhoneBookContext context)
         {
@@ -23,6 +24,7 @@ namespace PhoneBook.Data.UnitOfWork
         public IPersonRepository PersonRepository => _personRepository = _personRepository ?? new PersonRepository(_context);
 
         public IContactRepository ContactRepository => _contactRepository = _contactRepository ?? new ContactRepository(_context);
+        public IContactTypeRepository ContactTypeRepository => _contactTypeRepository = _contactTypeRepository ?? new ContactTypeRepository(_context);
 
         public async Task<int> CommitAsync()
         {

@@ -11,6 +11,7 @@ namespace PhoneBook.Data.UnitOfWork
     {
         IPersonRepository PersonRepository { get; }
         IContactRepository ContactRepository { get; }
+        IContactTypeRepository ContactTypeRepository { get; }
         Task<int> CommitAsync();
     }
 }

@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace PhoneBook.PersonOperationService.Controllers
 {
-    [Route("api/Persons")]
+    [Route("api/[controller]")]
+    [ApiController]
     public class PersonsController : ControllerBase
     {
         private readonly ILogger<PersonsController> _logger;

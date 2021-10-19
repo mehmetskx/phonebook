@@ -73,6 +73,7 @@ namespace PhoneBook.Services.PersonService
                     throw new Exception("Person is not find.");
 
                 findPersonById.IsActive = false;
+                findPersonById.ModifiedDate = DateTime.Now;
 
                 await _unitOfWork.PersonRepository.UpdateAsync(findPersonById);
                 var affected = await _unitOfWork.CommitAsync();

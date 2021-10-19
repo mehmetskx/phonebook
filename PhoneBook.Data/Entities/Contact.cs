@@ -6,6 +6,7 @@ namespace PhoneBook.Data.Entities
     public class Contact : BaseEntity<int>, IAuditable
     {
         public int ContactTypeId { get; set; }
+        public int PersonId { get; set; }
         public string Value { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
