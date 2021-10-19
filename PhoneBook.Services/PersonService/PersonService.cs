@@ -38,17 +38,54 @@ namespace PhoneBook.Services.PersonService
                 personEntity.IsActive = true;
 
                 var createdUser = await _unitOfWork.PersonRepository.AddAsync(personEntity);
-                var fetchCount = await _unitOfWork.CommitAsync();
+                var affected = await _unitOfWork.CommitAsync();
 
                 _logger.LogInformation($"Person added {createdUser}");
 
                 response.Data = _mapper.Map<PersonDto>(createdUser);
-                response.TotalRowCount = fetchCount;
+                response.TotalRowCount = affected;
                 return response;
             }
             catch (Exception ex)
             {
                 _logger.LogError("Error occured while adding person.");
+                ex.LogException(_logger, ex.Message);
+
+                response.ErrorList.Add(new Error
+                {
+                    Description = ex.Message
+                });
+
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel<PersonDto>> DeletePerson(int id)
+        {
+            var response = new ResponseModel<PersonDto>();
+            try
+            {
+                _logger.LogInformation($"PhoneBook.Services.PersonService => public async Task<ResponseModel<PersonDto>> DeletePerson(int id) = {id}");
+
+                var findPersonById = await _unitOfWork.PersonRepository.GetAsync(x => x.Id == id);
+
+                if (findPersonById is null)
+                    throw new Exception("Person is not find.");
+
+                findPersonById.IsActive = false;
+
+                await _unitOfWork.PersonRepository.UpdateAsync(findPersonById);
+                var affected = await _unitOfWork.CommitAsync();
+
+                _logger.LogInformation($"Person is removed {findPersonById}");
+
+                response.Data = _mapper.Map<PersonDto>(findPersonById);
+                response.TotalRowCount = affected;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error occured while removing person.");
                 ex.LogException(_logger, ex.Message);
 
                 response.ErrorList.Add(new Error

@@ -42,5 +42,11 @@ namespace PhoneBook.PersonOperationService.Controllers
         {
             return await _personService.AddPerson(person);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ResponseModel<PersonDto>> Delete(int id)
+        {
+            return await _personService.DeletePerson(id);
+        }
     }
 }

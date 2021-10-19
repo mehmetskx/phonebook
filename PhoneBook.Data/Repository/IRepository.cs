@@ -28,7 +28,7 @@ namespace PhoneBook.Data.Repository
 
         T Update(T entity, Expression<Func<T, bool>> match);
         Task<T> UpdateAsync(T entity, Expression<Func<T, bool>> match);
-        public Task UpdateAsync(T entity);
+        Task UpdateAsync(T entity);
 
 
         int Count();

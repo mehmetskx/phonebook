@@ -11,5 +11,6 @@ namespace PhoneBook.Services.PersonService
     public interface IPersonService
     {
         Task<ResponseModel<PersonDto>> AddPerson(PersonDto person);
+        Task<ResponseModel<PersonDto>> DeletePerson(int id);
     }
 }
