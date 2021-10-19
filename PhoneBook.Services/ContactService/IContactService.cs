@@ -11,5 +11,6 @@ namespace PhoneBook.Services.ContactService
     public interface IContactService
     {
         Task<ResponseModel<ContactDto>> Add(ContactDto contact);
+        Task<ResponseModel<ContactDto>> Remove(int contactId);
     }
 }

@@ -29,5 +29,11 @@ namespace PhoneBook.PersonOperationService.Controllers
         {
             return await _contactService.Add(contact);
         }
+
+        [HttpDelete("{contactId}")]
+        public async Task<ResponseModel<ContactDto>> Remove( int contactId)
+        {
+            return await _contactService.Remove(contactId);
+        }
     }
 }

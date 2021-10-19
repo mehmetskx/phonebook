@@ -66,5 +66,42 @@ namespace PhoneBook.Services.ContactService
                 return response;
             }
         }
+        public async Task<ResponseModel<ContactDto>> Remove(int contactId)
+        {
+            var response = new ResponseModel<ContactDto>();
+            try
+            {
+                _logger.LogInformation($"PhoneBook.Services.ContactService => Task<ResponseModel<ContactDto>> Remove(int contactId) = {contactId}");
+           
+                var findContactType = await _unitOfWork.ContactRepository.GetAsync(x => x.Id == contactId);
+
+                if (findContactType is null)
+                    throw new Exception("Contact type is not found.");
+
+                findContactType.ModifiedDate = DateTime.Now;
+                findContactType.IsActive = false;
+
+                await _unitOfWork.ContactRepository.UpdateAsync(findContactType);
+                var affected = await _unitOfWork.CommitAsync();
+
+                _logger.LogInformation($"Contact is added {findContactType}");
+
+                response.Data = _mapper.Map<ContactDto>(findContactType);
+                response.TotalRowCount = affected;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error occured while removing contact.");
+                ex.LogException(_logger, ex.Message);
+
+                response.ErrorList.Add(new Error
+                {
+                    Description = ex.Message
+                });
+
+                return response;
+            }
+        }
     }
 }
