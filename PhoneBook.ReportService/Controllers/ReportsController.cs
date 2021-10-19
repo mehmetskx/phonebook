@@ -25,7 +25,9 @@ namespace PhoneBook.ReportService.Controllers
         [HttpGet]
         public string Index()
         {
-            _excelOperator.SaveToFile();
+            var fagsd = AppDomain.CurrentDomain;
+            var fasd = AppDomain.CurrentDomain.BaseDirectory;
+            //_excelOperator.SaveToFile();
             return "";
         }
 
