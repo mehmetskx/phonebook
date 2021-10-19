@@ -12,6 +12,6 @@ namespace PhoneBook.Models.Dtos
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string CompanyName { get; set; }
-        public virtual ICollection<ContactDto> Contacts { get; set; }
+        public virtual IEnumerable<ContactDto> Contacts { get; set; }
     }
 }

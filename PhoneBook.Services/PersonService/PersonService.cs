@@ -10,6 +10,7 @@ using PhoneBook.Models.Dtos;
 using PhoneBook.Data.UnitOfWork;
 using PhoneBook.Data.Entities;
 using PhoneBook.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace PhoneBook.Services.PersonService
 {
@@ -87,6 +88,38 @@ namespace PhoneBook.Services.PersonService
             catch (Exception ex)
             {
                 _logger.LogError("Error occured while removing person.");
+                ex.LogException(_logger, ex.Message);
+
+                response.ErrorList.Add(new Error
+                {
+                    Description = ex.Message
+                });
+
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel<List<PersonDto>>> GetPersonByIdWithContactInfos(int id)
+        {
+            var response = new ResponseModel<List<PersonDto>>();
+            try
+            {
+                _logger.LogInformation($"PhoneBook.Services.PersonService => Task<ResponseModel<List<PersonDto>>> GetPersonByIdWithContactInfos(int id)");
+
+                var getAllPersons =await  _unitOfWork.PersonRepository.TableNoTracking.Include(x => x.Contacts).ThenInclude(x => x.ContactType).ToListAsync();               
+
+                _logger.LogInformation($"Persons list retrived {getAllPersons}");
+
+                if (getAllPersons.Count == 0)
+                    return response;
+
+                response.Data = _mapper.Map<List<PersonDto>>(getAllPersons);
+                response.TotalRowCount = getAllPersons.Count;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error occured while getting persons.");
                 ex.LogException(_logger, ex.Message);
 
                 response.ErrorList.Add(new Error

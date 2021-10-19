@@ -33,9 +33,9 @@ namespace PhoneBook.PersonOperationService.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ResponseModel<PersonDto>> GetById(int id)
+        public async Task<ResponseModel<List<PersonDto>>> GetById(int id)
         {
-            return default(ResponseModel<PersonDto>);
+            return await _personService.GetPersonByIdWithContactInfos(id);
         }
 
         [HttpPost]

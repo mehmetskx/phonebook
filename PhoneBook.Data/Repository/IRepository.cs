@@ -37,7 +37,8 @@ namespace PhoneBook.Data.Repository
 
         IQueryable<T> Table { get; }
         IQueryable<T> TableNoTracking { get; }
-
+        IQueryable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties);
         void Dispose();
+
     }
 }

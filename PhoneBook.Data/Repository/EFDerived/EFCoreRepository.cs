@@ -199,6 +199,17 @@ namespace PhoneBook.Data.Repository.EFDerived
             return await Entities.Where(match).CountAsync();
         }
 
+        public IQueryable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> queryable = Table;
+            foreach (Expression<Func<T, object>> includeProperty in includeProperties)
+            {
+                queryable = queryable.AsNoTracking().Include(includeProperty);
+            }
+
+            return queryable;
+        }
+
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
         {

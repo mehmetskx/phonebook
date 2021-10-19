@@ -14,6 +14,6 @@ namespace PhoneBook.Data.Entities
         public string CompanyName { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
-        public virtual IEnumerable<Contact> Contact { get; set; }
+        public virtual IEnumerable<Contact> Contacts { get; set; }
     }
 }
