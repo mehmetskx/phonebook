@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PhoneBook.Data.Context;
 using PhoneBook.Data.UnitOfWork;
 using PhoneBook.Services.ContactService;
 using PhoneBook.Services.Mapping;
 using PhoneBook.Services.PersonService;
+using System;
 
 namespace PhoneBook.PersonOperationService
 {
@@ -18,16 +21,15 @@ namespace PhoneBook.PersonOperationService
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+       
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
             services.AddMappings(Configuration);
             services.AddApplicationServices(Configuration);
+            services.AddCustomDbContext(Configuration);
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+               
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -36,8 +38,7 @@ namespace PhoneBook.PersonOperationService
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseExceptionHandler("/Home/Error");              
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
@@ -77,6 +78,21 @@ namespace PhoneBook.PersonOperationService
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IContactService, ContactService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            return services;
+        }
+
+        public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration Configuration)
+        {
+            services.AddDbContext<PhoneBookContext>(opt =>
+            {
+                opt.UseSqlServer(Configuration.GetConnectionString("AppConnection"),
+                    sqlServerOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(5), errorNumbersToAdd: null);
+                    })
+                .EnableSensitiveDataLogging();
+            });
+
             return services;
         }
     }
