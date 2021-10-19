@@ -9,6 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.95.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PhoneBook.Data\PhoneBook.Data.csproj" />
   </ItemGroup>
 

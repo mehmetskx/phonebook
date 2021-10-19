@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PhoneBook.Data\PhoneBook.Data.csproj" />
+    <ProjectReference Include="..\PhoneBook.Services\PhoneBook.Services.csproj" />
+  </ItemGroup>
+
 </Project>
