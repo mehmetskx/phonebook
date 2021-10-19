@@ -29,7 +29,7 @@ namespace PhoneBook.PersonOperationService.Controllers
         [HttpGet]
         public async Task<ResponseModel<PersonDto>> GetAll()
         {
-            return default(ResponseModel<PersonDto>);
+            return await _personService.GetPersons();
         }
 
         [HttpGet("{id}")]

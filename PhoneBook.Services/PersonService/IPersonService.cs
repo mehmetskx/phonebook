@@ -12,5 +12,6 @@ namespace PhoneBook.Services.PersonService
     {
         Task<ResponseModel<PersonDto>> AddPerson(PersonDto person);
         Task<ResponseModel<PersonDto>> DeletePerson(int id);
+        Task<ResponseModel<PersonDto>> GetPersons();
     }
 }

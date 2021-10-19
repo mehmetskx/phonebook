@@ -97,5 +97,37 @@ namespace PhoneBook.Services.PersonService
                 return response;
             }
         }
+
+        public async Task<ResponseModel<PersonDto>> GetPersons()
+        {
+            var response = new ResponseModel<PersonDto>();
+            try
+            {
+                _logger.LogInformation($"PhoneBook.Services.PersonService => public async Task<ResponseModel<PersonDto>> GetPersons()");
+
+                var getAllPersons = await _unitOfWork.PersonRepository.GetAllAsync(x => x.IsActive);               
+
+                _logger.LogInformation($"Persons list retrived {getAllPersons}");
+
+                if (getAllPersons.Count == 0)
+                    return response;
+
+                response.Data = _mapper.Map<PersonDto>(getAllPersons);
+                response.TotalRowCount = getAllPersons.Count;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error occured while getting persons.");
+                ex.LogException(_logger, ex.Message);
+
+                response.ErrorList.Add(new Error
+                {
+                    Description = ex.Message
+                });
+
+                return response;
+            }
+        }
     }
 }
