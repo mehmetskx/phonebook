@@ -40,7 +40,7 @@ namespace PhoneBook.PersonOperationService.Controllers
         [HttpPost]
         public async Task<ResponseModel<PersonDto>> Add([FromBody] PersonDto person)
         {
-            return default(ResponseModel<PersonDto>);
+            return await _personService.AddPerson(person);
         }
     }
 }
