@@ -9,6 +9,6 @@ namespace PhoneBook.Utils.ExcelHelpers
 {
     public interface IExcelOperator
     {
-        ResponseModel<string> SaveToFile(int reportId);
+        Task<ResponseModel<string>> SaveToFile(int reportId);
     }
 }

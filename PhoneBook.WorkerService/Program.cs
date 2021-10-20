@@ -1,9 +1,11 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PhoneBook.Data.Context;
 using PhoneBook.Data.UnitOfWork;
+using PhoneBook.Services.Mapping;
 using PhoneBook.Services.ReportService;
 using PhoneBook.Utils.ExcelHelpers;
 using PhoneBook.Utils.MQHelper;
@@ -29,10 +31,19 @@ namespace PhoneBook.WorkerService
                    .AddJsonFile("appsettings.json")
                    .Build();
 
-                    
+
+                    services.AddSingleton<IMapper>((serviceProvider) =>
+                    {
+                        var config = new MapperConfiguration(cfg =>
+                        {
+                            cfg.AddProfile<PhoneBookModelMappingProfile>();
+
+                        });
+                        return config.CreateMapper();
+                    });
 
                     services.AddHostedService<Worker>();
-                    services.AddScoped<IUnitOfWork, UnitOfWork>();
+                    services.AddTransient<IUnitOfWork, UnitOfWork>();
                     services.AddTransient<IExcelOperator, ExcelOperator>();
                     services.AddTransient<IRabbitMqHelper, RabbitMqHelper>();
                     services.AddTransient<IReportService, ReporterService>();

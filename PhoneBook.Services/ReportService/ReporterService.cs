@@ -12,6 +12,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -88,22 +89,17 @@ namespace PhoneBook.Services.ReportService
                 var consumer = new EventingBasicConsumer(channel);
 
                 channel.BasicConsume("excel-queue", false, consumer);
-                //Gelecek data sayısı
 
-                consumer.Received += (object sender, BasicDeliverEventArgs e) =>
+                consumer.Received += async (object sender, BasicDeliverEventArgs e) =>
                 {
                     var queueReport = JsonSerializer.Deserialize<Report>(Encoding.UTF8.GetString(e.Body.ToArray()));
 
-                    var saveFileResult = _excelOperator.SaveToFile(reportId: queueReport.Id);
+                    var saveFileResult = await _excelOperator.SaveToFile(reportId: queueReport.Id);
 
                     Console.WriteLine($"id {queueReport.Id}");
 
                     if (saveFileResult.IsSuccess)
                     {
-                        queueReport.ReportStatusType = ReportStatusType.Ready;
-                        queueReport.ModifiedDate = DateTime.Now;
-                        queueReport.FilePath = saveFileResult.Data;
-                        response.Data = queueReport;
                         channel.BasicAck(e.DeliveryTag, false);
                     }
                 };
@@ -122,7 +118,6 @@ namespace PhoneBook.Services.ReportService
             var response = new ResponseModel<List<ReportDto>>();
             try
             {
-
                 _logger.LogInformation($"PhoneBook.Services.ReportService => Task<ResponseModel<List<Report>>> GetAllReports()");
                 var reportList = await _unitOfWork.ReportRepository.GetAllAsync(x => x.IsActive);
 
@@ -130,7 +125,7 @@ namespace PhoneBook.Services.ReportService
                     return default(ResponseModel<List<ReportDto>>);
 
                 response.Data = _mapper.Map<List<ReportDto>>(reportList);
-                response.TotalRowCount = reportList.Count(); 
+                response.TotalRowCount = reportList.Count();
                 return response;
             }
             catch (Exception ex)
@@ -144,6 +139,31 @@ namespace PhoneBook.Services.ReportService
                 });
                 return response;
             }
+        }
+
+        public async Task<ResponseModel<string>> UpdateExcelStatus(string path, int reportId)
+        {
+            var response = new ResponseModel<string>();
+            try
+            {
+                var getReportById = await _unitOfWork.ReportRepository.GetAsync(x => x.Id == reportId);
+
+                if (getReportById is null)
+                    throw new Exception("Report is not defined.");
+
+                getReportById.ModifiedDate = DateTime.Now;
+                getReportById.ReportStatusType = ReportStatusType.Ready;
+
+                await _unitOfWork.ReportRepository.UpdateAsync(getReportById);
+                await _unitOfWork.CommitAsync();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return response;
+            }
+
         }
     }
 }

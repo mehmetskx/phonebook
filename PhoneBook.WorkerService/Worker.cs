@@ -30,12 +30,8 @@ namespace PhoneBook.WorkerService
                 using var scope = _serviceScopeFactory.CreateScope();
 
                 var _reportService = scope.ServiceProvider.GetService<IReportService>();
-                var _unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
 
                 var createdExcel = await _reportService.ConsumeRedisQueue();
-
-                if (createdExcel.IsSuccess)
-                    await _unitOfWork.ReportRepository.UpdateAsync(createdExcel.Data);
 
             }
         }
