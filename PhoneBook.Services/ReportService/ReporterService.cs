@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using PhoneBook.Data.Entities;
 using PhoneBook.Data.UnitOfWork;
 using PhoneBook.Models;
+using PhoneBook.Models.Dtos;
 using PhoneBook.Models.Enums;
 using PhoneBook.Utils;
 using PhoneBook.Utils.ExcelHelpers;
@@ -20,20 +22,21 @@ namespace PhoneBook.Services.ReportService
     public class ReporterService : IReportService
     {
         private readonly ILogger<ReporterService> _logger;
+        private readonly IMapper _mapper;
         private readonly IRabbitMqHelper _rabbitMqHelper;
         private readonly IExcelOperator _excelOperator;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ReporterService(ILogger<ReporterService> logger, IRabbitMqHelper rabbitMqHelper, IExcelOperator excelOperator, IUnitOfWork unitOfWork)
+        public ReporterService(ILogger<ReporterService> logger, IRabbitMqHelper rabbitMqHelper, IExcelOperator excelOperator, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _logger = logger;
             _rabbitMqHelper = rabbitMqHelper;
             _excelOperator = excelOperator;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<ResponseModel<ReportStatusType>> CreateReportRequest()
-
         {
             var response = new ResponseModel<ReportStatusType>();
             try
@@ -112,6 +115,35 @@ namespace PhoneBook.Services.ReportService
                 return response;
             }
 
+        }
+
+        public async Task<ResponseModel<List<ReportDto>>> GetAllReports()
+        {
+            var response = new ResponseModel<List<ReportDto>>();
+            try
+            {
+
+                _logger.LogInformation($"PhoneBook.Services.ReportService => Task<ResponseModel<List<Report>>> GetAllReports()");
+                var reportList = await _unitOfWork.ReportRepository.GetAllAsync(x => x.IsActive);
+
+                if (reportList is null)
+                    return default(ResponseModel<List<ReportDto>>);
+
+                response.Data = _mapper.Map<List<ReportDto>>(reportList);
+                response.TotalRowCount = reportList.Count(); 
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error occured while getting report.");
+                ex.LogException(_logger, ex.Message);
+
+                response.ErrorList.Add(new Error
+                {
+                    Description = ex.Message
+                });
+                return response;
+            }
         }
     }
 }

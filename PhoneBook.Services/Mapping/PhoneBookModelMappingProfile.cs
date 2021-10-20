@@ -18,6 +18,7 @@ namespace PhoneBook.Services.Mapping
             CreateMap<Person, PersonDto>().ReverseMap();
             CreateMap<Contact, ContactDto>().ReverseMap();
             CreateMap<ContactType, ContactTypeDto>().ReverseMap();           
+            CreateMap<Report, ReportDto>().ReverseMap();           
         }
     }
 }

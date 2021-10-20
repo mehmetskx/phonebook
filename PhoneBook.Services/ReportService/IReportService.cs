@@ -1,5 +1,6 @@
 ﻿using PhoneBook.Data.Entities;
 using PhoneBook.Models;
+using PhoneBook.Models.Dtos;
 using PhoneBook.Models.Enums;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,7 @@ namespace PhoneBook.Services.ReportService
     {
         Task<ResponseModel<ReportStatusType>> CreateReportRequest();
         Task<ResponseModel<Report>> ConsumeRedisQueue();
+        Task<ResponseModel<List<ReportDto>>> GetAllReports();
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PhoneBook.Models;
+using PhoneBook.Models.Dtos;
 using PhoneBook.Models.Enums;
 using PhoneBook.ReportService.Models;
 using PhoneBook.Services.ReportService;
@@ -27,6 +28,12 @@ namespace PhoneBook.ReportService.Controllers
             _excelOperator = excelOperator;
             _reportService = reportService;
         }
+        [HttpGet("getall")]
+        public async Task<ResponseModel<List<ReportDto>>> GetAll()
+        {
+            return await _reportService.GetAllReports();
+        }
+
         [HttpGet]
         public async Task<ResponseModel<ReportStatusType>> Index()
         {
