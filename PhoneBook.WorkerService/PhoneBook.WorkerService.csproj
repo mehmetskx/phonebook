@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>dotnet-PhoneBook.WorkerService-D329E2B6-5122-4CBB-8A45-5A65029FDB02</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PhoneBook.Services\PhoneBook.Services.csproj" />
+    <ProjectReference Include="..\PhoneBook.Utils\PhoneBook.Utils.csproj" />
+  </ItemGroup>
+</Project>

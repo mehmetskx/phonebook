@@ -18,6 +18,7 @@ namespace PhoneBook.Data.Context
         public DbSet<Person> Person { get; set; }
         public DbSet<Contact> Contact { get; set; }
         public DbSet<ContactType> ContactType { get; set; }
+        public DbSet<Report> Report { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

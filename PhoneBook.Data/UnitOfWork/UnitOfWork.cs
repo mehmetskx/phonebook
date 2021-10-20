@@ -15,6 +15,7 @@ namespace PhoneBook.Data.UnitOfWork
         private PersonRepository _personRepository;
         private ContactRepository _contactRepository;
         private ContactTypeRepository _contactTypeRepository;
+        private ReportRepository _reportRepository;
 
         public UnitOfWork(PhoneBookContext context)
         {
@@ -25,6 +26,7 @@ namespace PhoneBook.Data.UnitOfWork
 
         public IContactRepository ContactRepository => _contactRepository = _contactRepository ?? new ContactRepository(_context);
         public IContactTypeRepository ContactTypeRepository => _contactTypeRepository = _contactTypeRepository ?? new ContactTypeRepository(_context);
+        public IReportRepository ReportRepository => _reportRepository = _reportRepository ?? new ReportRepository(_context);
 
         public async Task<int> CommitAsync()
         {

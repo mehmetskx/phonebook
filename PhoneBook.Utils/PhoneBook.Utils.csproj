@@ -10,10 +10,12 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PhoneBook.Data\PhoneBook.Data.csproj" />
+    <ProjectReference Include="..\PhoneBook.Models\PhoneBook.Models.csproj" />
   </ItemGroup>
 
 </Project>

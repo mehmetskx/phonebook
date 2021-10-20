@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PhoneBook.Models;
+using PhoneBook.Models.Enums;
 using PhoneBook.ReportService.Models;
+using PhoneBook.Services.ReportService;
 using PhoneBook.Utils.ExcelHelpers;
 using System;
 using System.Collections.Generic;
@@ -16,19 +19,18 @@ namespace PhoneBook.ReportService.Controllers
     {
         private readonly ILogger<ReportsController> _logger;
         private readonly IExcelOperator _excelOperator;
+        private readonly IReportService _reportService;
 
-        public ReportsController(ILogger<ReportsController> logger, IExcelOperator excelOperator = null)
+        public ReportsController(ILogger<ReportsController> logger, IExcelOperator excelOperator, IReportService reportService)
         {
             _logger = logger;
             _excelOperator = excelOperator;
+            _reportService = reportService;
         }
         [HttpGet]
-        public string Index()
+        public async Task<ResponseModel<ReportStatusType>> Index()
         {
-            var fagsd = AppDomain.CurrentDomain;
-            var fasd = AppDomain.CurrentDomain.BaseDirectory;
-            //_excelOperator.SaveToFile();
-            return "";
+            return await _reportService.CreateReportRequest();
         }
 
     }

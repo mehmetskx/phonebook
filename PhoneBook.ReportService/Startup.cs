@@ -10,6 +10,7 @@ using PhoneBook.Data.UnitOfWork;
 using PhoneBook.Services.Mapping;
 using PhoneBook.Services.ReportService;
 using PhoneBook.Utils.ExcelHelpers;
+using PhoneBook.Utils.MQHelper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,8 +32,8 @@ namespace PhoneBook.ReportService
         {
             services.AddControllersWithViews();
             services.AddMappings(Configuration);
-            services.AddApplicationServices(Configuration);
             services.AddCustomDbContext(Configuration);
+            services.AddApplicationServices(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -79,8 +80,10 @@ namespace PhoneBook.ReportService
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IRabbitMqHelper, RabbitMqHelper>();
             services.AddScoped<IReportService, ReporterService>();
             services.AddScoped<IExcelOperator, ExcelOperator>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }
 
