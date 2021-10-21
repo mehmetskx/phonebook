@@ -1,7 +1,7 @@
 # phonebook
 
 # Amaç
-Telefon defterine kullanıcı eklenebilmesi, kullanıcıya ait iletişim bilgilerinin eklenip background servisler ile raporlanabilmesi görüntülenmesi
+Telefon defterine kullanıcı eklenebilmesi, kullanıcıya ait iletişim bilgilerinin eklenip background servisler ile raporlanıp görüntülenmesi
 
 ## Api Layer
 
@@ -13,7 +13,7 @@ GET api/Persons/{id} => Kişi + kişiye ait iletişim bilgilerini döndürür.
 POST api/Persons/ => Yeni kişi oluşturur.  
 DELETE api/Persons/ => Mevcud kişiyi siler.  
   
-**Contacts Controller** 
+**Contacts Controller**   
 POST api/Contacts => Kişiye iletişim bilgisi ekler  
 DELETE api/Contacts => İletişim bilgisinin silinmesini sağlar  
 
