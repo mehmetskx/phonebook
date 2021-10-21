@@ -99,22 +99,22 @@ namespace PhoneBook.Services.PersonService
             }
         }
 
-        public async Task<ResponseModel<List<PersonDto>>> GetPersonByIdWithContactInfos(int id)
+        public async Task<ResponseModel<PersonDto>> GetPersonByIdWithContactInfos(int id)
         {
-            var response = new ResponseModel<List<PersonDto>>();
+            var response = new ResponseModel<PersonDto>();
             try
             {
                 _logger.LogInformation($"PhoneBook.Services.PersonService => Task<ResponseModel<List<PersonDto>>> GetPersonByIdWithContactInfos(int id)");
 
-                var getAllPersons =await  _unitOfWork.PersonRepository.TableNoTracking.Include(x => x.Contacts).ThenInclude(x => x.ContactType).ToListAsync();               
+                var getPerson = await _unitOfWork.PersonRepository.TableNoTracking.Include(x => x.Contacts).ThenInclude(x => x.ContactType).FirstOrDefaultAsync(x => x.Id == id);
 
-                _logger.LogInformation($"Persons list retrived {getAllPersons}");
+                _logger.LogInformation($"Persons list retrived {getPerson}");
 
-                if (getAllPersons.Count == 0)
+                if (getPerson == null)
                     return response;
 
-                response.Data = _mapper.Map<List<PersonDto>>(getAllPersons);
-                response.TotalRowCount = getAllPersons.Count;
+                response.Data = _mapper.Map<PersonDto>(getPerson);
+                response.TotalRowCount = 1;
                 return response;
             }
             catch (Exception ex)
@@ -131,21 +131,21 @@ namespace PhoneBook.Services.PersonService
             }
         }
 
-        public async Task<ResponseModel<PersonDto>> GetPersons()
+        public async Task<ResponseModel<List<PersonDto>>> GetPersons()
         {
-            var response = new ResponseModel<PersonDto>();
+            var response = new ResponseModel<List<PersonDto>>();
             try
             {
                 _logger.LogInformation($"PhoneBook.Services.PersonService => public async Task<ResponseModel<PersonDto>> GetPersons()");
 
-                var getAllPersons = await _unitOfWork.PersonRepository.GetAllAsync(x => x.IsActive);               
+                var getAllPersons = await _unitOfWork.PersonRepository.GetAllAsync(x => x.IsActive);
 
                 _logger.LogInformation($"Persons list retrived {getAllPersons}");
 
                 if (getAllPersons.Count == 0)
                     return response;
 
-                response.Data = _mapper.Map<PersonDto>(getAllPersons);
+                response.Data = _mapper.Map<List<PersonDto>>(getAllPersons);
                 response.TotalRowCount = getAllPersons.Count;
                 return response;
             }

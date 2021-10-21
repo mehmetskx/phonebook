@@ -27,27 +27,42 @@ namespace PhoneBook.PersonOperationService.Controllers
         }
 
         [HttpGet]
-        public async Task<ResponseModel<PersonDto>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return await _personService.GetPersons();
+            return Ok(await _personService.GetPersons());
         }
 
         [HttpGet("{id}")]
-        public async Task<ResponseModel<List<PersonDto>>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            return await _personService.GetPersonByIdWithContactInfos(id);
+            var response = await _personService.GetPersonByIdWithContactInfos(id);
+
+            if (response is null)
+                return NotFound();
+
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<ResponseModel<PersonDto>> Add([FromBody] PersonDto person)
+        public async Task<IActionResult> Add([FromBody] PersonDto person)
         {
-            return await _personService.AddPerson(person);
+            var response = await _personService.AddPerson(person);
+
+            if (!response.IsSuccess)
+                return BadRequest(response);
+
+            return Created(string.Empty, response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ResponseModel<PersonDto>> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return await _personService.DeletePerson(id);
+            var response = await _personService.DeletePerson(id);
+
+            if (!response.IsSuccess)
+                return NotFound(response);
+
+            return Ok(response);
         }
     }
 }

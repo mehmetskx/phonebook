@@ -56,5 +56,10 @@ namespace PhoneBook.Models
                 _ErrorList = value;
             }
         }
+
+        public object First()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
