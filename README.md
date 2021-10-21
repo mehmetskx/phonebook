@@ -14,8 +14,8 @@ POST api/Persons/ => Yeni kişi oluşturur.
 DELETE api/Persons/ => Mevcud kişiyi siler.  
   
 **Contacts Controller** 
-POST api/Contacts => Kişiye iletişim bilgisi ekler
-DELETE api/Contacts => İletişim bilgisinin silinmesini sağlar
+POST api/Contacts => Kişiye iletişim bilgisi ekler  
+DELETE api/Contacts => İletişim bilgisinin silinmesini sağlar  
 
 ### PhoneBook.ReportService
 GET api/Reports/getall => Tüm raporları listeler  
