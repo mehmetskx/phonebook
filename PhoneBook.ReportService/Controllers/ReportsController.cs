@@ -37,7 +37,7 @@ namespace PhoneBook.ReportService.Controllers
         }
 
         [HttpGet]
-        public async Task<ResponseModel<ReportStatusType>> Index()
+        public async Task<ResponseModel<ReportStatusType>> CreateReport()
         {
             return await _reportService.CreateReportRequest();
         }

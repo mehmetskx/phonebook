@@ -1,4 +1,6 @@
-﻿using PhoneBook.Models;
+﻿using PhoneBook.Data.Entities;
+using PhoneBook.Models;
+using PhoneBook.Models.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,6 @@ namespace PhoneBook.Utils.ExcelHelpers
 {
     public interface IExcelOperator
     {
-        Task<ResponseModel<string>> SaveToFile(int reportId);
+        Task<ResponseModel<string>> SaveToFile(int reportId, List<Contact> contacts);
     }
 }

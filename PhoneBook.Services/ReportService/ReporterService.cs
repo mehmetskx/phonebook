@@ -71,6 +71,14 @@ namespace PhoneBook.Services.ReportService
             }
         }
 
+        public async Task<List<ReportDto>> GenereteReportData()
+        {
+            var reports = await _unitOfWork.ContactRepository.GetAllAsync(x => x.IsActive);
+            var groupedReportValues = reports.GroupBy(x => x.ContactTypeId);
+
+            return null;
+        }
+
         public async Task<ResponseModel<Report>> ConsumeRedisQueue()
         {
             var response = new ResponseModel<Report>();
@@ -94,7 +102,10 @@ namespace PhoneBook.Services.ReportService
                 {
                     var queueReport = JsonSerializer.Deserialize<Report>(Encoding.UTF8.GetString(e.Body.ToArray()));
 
-                    var saveFileResult = await _excelOperator.SaveToFile(reportId: queueReport.Id);
+                    var reportValues = await _unitOfWork.ContactRepository.GetAllAsync(x => x.IsActive);
+
+                    var saveFileResult = await _excelOperator.SaveToFile(reportId: queueReport.Id, reportValues.ToList
+                        ());
 
                     Console.WriteLine($"id {queueReport.Id}");
 

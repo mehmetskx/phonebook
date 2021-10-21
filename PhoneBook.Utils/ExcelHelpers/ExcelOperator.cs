@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using PhoneBook.Data.Entities;
 using PhoneBook.Models;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace PhoneBook.Utils.ExcelHelpers
 {
     public class ExcelOperator : IExcelOperator
     {
-        public async Task<ResponseModel<string>> SaveToFile(int reportId)
+        public async Task<ResponseModel<string>> SaveToFile(int reportId, List<Contact> contacts)
         {
             var response = new ResponseModel<string>();
             try
@@ -45,11 +46,13 @@ namespace PhoneBook.Utils.ExcelHelpers
                 titleStyle.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
                 #endregion
 
+                worksheet.Cell("A2").Value = contacts.Where(x => x.ContactTypeId == (int)Models.Enums.ContactType.Location).Count();
+                worksheet.Cell("B2").Value = contacts.Where(x => x.ContactTypeId == (int)Models.Enums.ContactType.Email).Count();
+                worksheet.Cell("C2").Value = contacts.Where(x => x.ContactTypeId == (int)Models.Enums.ContactType.Phone).Count();
+
+
                 using MemoryStream memoryStream = new MemoryStream();
                 workbook.SaveAs(memoryStream);
-
-                //string fileName = $"{DateTime.Now.ToString("dd.MM.yyyy_" + reportId + "_HH.mm.ss")}.xlsx";
-                //workbook.SaveAs(@"C:\Users\Rise Teknoloji\Desktop\" + fileName);
 
                 string fileName = $"{DateTime.Now.ToString("dd.MM.yyyy_" + reportId + "_HH.mm.ss")}.xlsx";
                 excelFile = memoryStream.ToArray();

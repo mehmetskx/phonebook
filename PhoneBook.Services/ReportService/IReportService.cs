@@ -16,5 +16,8 @@ namespace PhoneBook.Services.ReportService
         Task<ResponseModel<Report>> ConsumeRedisQueue();
         Task<ResponseModel<List<ReportDto>>> GetAllReports();
         Task<ResponseModel<string>> UpdateExcelStatus(string file, int reportId);
+
+        //Test
+        Task<List<ReportDto>> GenereteReportData();
     }
 }
