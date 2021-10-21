@@ -26,6 +26,6 @@ POST api/Upload => Worker servis'in oluşturduğu exceli kendi assembly'sine kay
 Data transfer objelerin'in yer aldığı katmandır.  
 
 ### PhoneBook.Utils  
--- Rabbit MQ => Kuyruk mekanizması lagic'leri bulunmaktadır.  
--- Excel Helper => Excel oluşturma logicleri yer almaktadır.  
+- Rabbit MQ => Kuyruk mekanizması lagic'leri bulunmaktadır.  
+- Excel Helper => Excel oluşturma logicleri yer almaktadır.  
 
